@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon Connections אקראי</title>
+<link rel="icon" type="image/png" href="https://gierb.github.io/hosted-assets/pkm-conn-logo.png">
+<link rel="apple-touch-icon" href="https://gierb.github.io/hosted-assets/pkm-conn-logo.png">
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+h1 { color: #333; margin-bottom: 5px; }
+p { color: #666; margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 500px; width: 100%; margin-bottom: 20px; }
+.card { background-color: #efefe0; border-radius: 8px; padding: 10px; text-align: center; font-weight: bold; cursor: pointer; transition: all 0.2s ease; user-select: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.card img { width: 70px; height: 70px; object-fit: contain; display: block; margin: 0 auto 5px auto; }
+.card.selected { background-color: #5a5a5a; color: white; transform: scale(0.95); }
+.buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+button { padding: 12px 24px; font-size: 16px; font-weight: bold; border: 1px solid #ccc; border-radius: 25px; background-color: white; cursor: pointer; transition: background 0.2s; }
+button:hover { background-color: #f0f0f0; }
+.solved-row { grid-column: span 4; color: white; font-weight: bold; text-align: center; padding: 15px; border-radius: 8px; animation: pop 0.3s ease; }
+@keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
+.cat-0 { background-color: #f9df6d; color: #222; }
+.cat-1 { background-color: #76b947; color: white; }
+.cat-2 { background-color: #749edc; color: white; }
+.cat-3 { background-color: #b07cc6; color: white; }
+</style>
+</head>
+<body>
+<h1>Pokémon Connections</h1>
+<p>בחר 4 פוקימונים שיש להם קשר משותף! (הקבוצות משתנות בכל רענון)</p>
+<div class="grid" id="game-grid"></div>
+<div class="buttons">
+<button id="submit-btn">בדיקה</button>
+<button id="deselect-btn">ביטול בחירה</button>
+</div>
+<script>
+const allCategories = [
+{ desc: "פוקימונים התחלתיים מסוג אש (Starter Fire)", pokes: [{name:"Charizard",id:6},{name:"Typhlosion",id:157},{name:"Blaziken",id:257},{name:"Infernape",id:392}] },
+{ desc: "פוקימונים אגדיים (Legendary)", pokes: [{name:"Mewtwo",id:150},{name:"Lugia",id:249},{name:"Rayquaza",id:384},{name:"Arceus",id:493}] },
+{ desc: "פוקימונים בצורת תינוק (Baby Pokémon)", pokes: [{name:"Togepi",id:175},{name:"Pichu",id:172},{name:"Magby",id:240},{name:"Elekid",id:239}] },
+{ desc: "פוקימונים שיש להם 8 אבולוציות (משפחת איווי)", pokes: [{name:"Eevee",id:133},{name:"Vaporeon",id:134},{name:"Jolteon",id:135},{name:"Flareon",id:136}] },
+{ desc: "פוקימונים מאובנים (Fossil Pokémon)", pokes: [{name:"Aerodactyl",id:142},{name:"Omanyte",id:138},{name:"Kabuto",id:140},{name:"Tyrunt",id:696}] },
+{ desc: "פוקימונים שיכולים להשתנות למכשירי חשמל", pokes: [{name:"Rotom",id:479},{name:"Pikachu",id:25},{name:"Gligar",id:207},{name:"Sneasel",id:215}] },
+{ desc: "פוקימונים מסוג דרקון (Dragon Type)", pokes: [{name:"Dragonite",id:149},{name:"Garchomp",id:443},{name:"Salamence",id:373},{name:"Haxorus",id:612}] },
+{ desc: "פוקימונים עגולים בצורת כדור", pokes: [{name:"Koffing",id:109},{name:"Voltorb",id:100},{name:"Jigglypuff",id:39},{name:"Gastly",id:92}] }
+];
+let selectedCategories = [...allCategories].sort(() => Math.random() - 0.5).slice(0, 4);
+let pokemonData = [];
+selectedCategories.forEach((cat, index) => {
+cat.pokes.forEach(p => {
+pokemonData.push({ name: p.name, id: p.id, catIndex: index, desc: cat.desc, solved: false });
+});
+});
+let currentPokemon = [...pokemonData].sort(() => Math.random() - 0.5);
+let selectedCards = [];
+const grid = document.getElementById('game-grid');
+function renderGrid() {
+grid.innerHTML = '';
+currentPokemon.forEach(poke => {
+if (poke.solved) return;
+const card = document.createElement('div');
+card.className = 'card';
+card.dataset.name = poke.name;
+const img = document.createElement('img');
+img.src = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${String(poke.id).padStart(3, '0')}.png`;
+img.alt = poke.name;
+const nameText = document.createElement('div');
+nameText.innerText = poke.name;
+card.appendChild(img);
+card.appendChild(nameText);
+card.addEventListener('click', () => toggleSelect(card, poke));
+grid.appendChild(card);
+});
+}
+function toggleSelect(card, poke) {
+if (card.classList.contains('selected')) {
+card.classList.remove('selected');
+selectedCards = selectedCards.filter(p => p.name !== poke.name);
+} else {
+if (selectedCards.length < 4) {
+card.classList.add('selected');
+selectedCards.push(poke);
+}
+}
+}
+document.getElementById('deselect-btn').addEventListener('click', () => {
+document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+selectedCards = [];
+});
+document.getElementById('submit-btn').addEventListener('click', () => {
+if (selectedCards.length !== 4) {
+alert('יש לבחור בדיוק 4 פוקימונים!');
+return;
+}
+const firstCat = selectedCards[0].catIndex;
+const isCorrect = selectedCards.every(p => p.catIndex === firstCat);
+if (isCorrect) {
+const desc = selectedCards[0].desc;
+selectedCards.forEach(p => {
+const found = pokemonData.find(pd => pd.name === p.name);
+found.solved = true;
+});
+const solvedRow = document.createElement('div');
+solvedRow.className = `solved-row cat-${firstCat}`;
+solvedRow.innerHTML = `<strong>${desc}</strong><br>${selectedCards.map(p => p.name).join(', ')}`;
+currentPokemon = currentPokemon.filter(p => !p.solved);
+renderGrid();
+grid.insertBefore(solvedRow, grid.firstChild);
+selectedCards = [];
+if (currentPokemon.length === 0) {
+setTimeout(() => alert('כל הכבוד! פתרת את כל הלוח! 🎉'), 500);
+}
+} else {
+alert('שילוב שגוי, נסה שוב!');
+}
+});
+renderGrid();
+</script>
+</body>
+</html>
