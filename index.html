@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokémon Connections אקראי</title>
-<link rel="icon" type="image/png" href="pokemester.png">
-<link rel="apple-touch-icon" href="pokemester.png">
+<title>Pokémon Connections</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='white' stroke='black' stroke-width='8'/><path d='M5,50 a45,45 0 0,1 90,0 Z' fill='red' stroke='black' stroke-width='4'/><line x1='5' y1='50' x2='95' y2='50' stroke='black' stroke-width='8'/><circle cx='50' cy='50' r='15' fill='white' stroke='black' stroke-width='8'/><circle cx='50' cy='50' r='6' fill='white' stroke='black' stroke-width='2'/></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='white' stroke='black' stroke-width='8'/><path d='M5,50 a45,45 0 0,1 90,0 Z' fill='red' stroke='black' stroke-width='4'/><line x1='5' y1='50' x2='95' y2='50' stroke='black' stroke-width='8'/><circle cx='50' cy='50' r='15' fill='white' stroke='black' stroke-width='8'/><circle cx='50' cy='50' r='6' fill='white' stroke='black' stroke-width='2'/></svg>">
 <style>
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
 h1 { color: #333; margin-bottom: 5px; }
@@ -17,7 +17,7 @@ p { color: #666; margin-bottom: 20px; }
 .buttons { display: flex; gap: 10px; margin-bottom: 20px; }
 button { padding: 12px 24px; font-size: 16px; font-weight: bold; border: 1px solid #ccc; border-radius: 25px; background-color: white; cursor: pointer; transition: background 0.2s; }
 button:hover { background-color: #f0f0f0; }
-.solved-row { grid-column: span 4; color: white; font-weight: bold; text-align: center; padding: 15px; border-radius: 8px; animation: pop 0.3s ease; }
+.solved-row { grid-column: span 4; color: white; font-weight: bold; text-align: center; padding: 15px; border-radius: 8px; animation: pop 0.3s ease; margin-bottom: 10px; width: 100%; max-width: 500px; box-sizing: border-box; }
 @keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
 .cat-0 { background-color: #f9df6d; color: #222; }
 .cat-1 { background-color: #76b947; color: white; }
